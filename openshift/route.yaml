@@ -1,0 +1,20 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: qsrp-frontend
+  labels:
+    app: qsrp
+    component: frontend
+spec:
+  # Replace with your actual hostname
+  host: qsrp.apps.your-cluster.example.com
+  to:
+    kind: Service
+    name: qsrp-frontend
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qsrp-frontend
+  labels:
+    app: qsrp
+    component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: qsrp
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: qsrp
+        component: frontend
+    spec:
+      containers:
+        - name: qsrp-frontend
+          image: image-registry.openshift-image-registry.svc:5000/NAMESPACE/qsrp-frontend:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      securityContext:
+        runAsNonRoot: true

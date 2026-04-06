@@ -1,0 +1,27 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: qsrp-frontend
+  labels:
+    app: qsrp
+    component: frontend
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/YOUR_ORG/qsrp.git
+      ref: main
+    contextDir: .
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: openshift/Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: qsrp-frontend:latest
+  triggers:
+    - type: GitHub
+      github:
+        secret: your-github-webhook-secret
+    - type: ConfigChange
